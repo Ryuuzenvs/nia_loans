@@ -12,18 +12,19 @@ class DatabaseSeeder extends Seeder
     {
         User::factory()->admin()->create();   
         User::factory()->officer()->create(); 
-        User::factory(5)->create();           
+        User::factory()->nia()->create(); 
+//        User::factory(5)->create();           
 
         category::insert([
-            ['nama_kategori' => 'alat tulis', 'created_at' => now(), 'updated_at' => now()],
-            ['nama_kategori' => 'alat olahraga', 'created_at' => now(), 'updated_at' => now()],
-            ['nama_kategori' => 'alat pembersih', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Buku Novel', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Buku Pelajaran', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Buku Sejarah', 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         tool::insert([
-            ['name_tools' => 'pena', 'category_id' => 1, 'stock' => 10, 'created_at' => now(), 'price' => 1000],
-            ['name_tools' => 'bola basket', 'category_id' => 2, 'stock' => 10, 'created_at' => now(),'price' => 2000],
-            ['name_tools' => 'lap', 'category_id' => 3, 'stock' => 10, 'created_at' => now(),'price' => 3000],
+            ['name_tools' => 'Novel', 'category_id' => 1, 'stock' => 10, 'created_at' => now(), 'price' => 1000],
+            ['name_tools' => 'mtk', 'category_id' => 2, 'stock' => 10, 'created_at' => now(),'price' => 2000],
+            ['name_tools' => 'Sejarah', 'category_id' => 3, 'stock' => 10, 'created_at' => now(),'price' => 3000],
         ]);
     }
 }

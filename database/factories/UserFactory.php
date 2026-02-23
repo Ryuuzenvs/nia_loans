@@ -36,4 +36,12 @@ class UserFactory extends Factory
             'role' => 'officer',
         ]);
     }
+public function nia(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'username' => 'Agniya',
+            'password' => Hash::make('12345678'),
+            'role' => 'borrower',
+        ]);
+    }
 }

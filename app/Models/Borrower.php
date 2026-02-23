@@ -9,7 +9,8 @@ class Borrower extends Model
     //
 protected $fillable = [
         'name',
-        'class',
+        'no_hp',
+        'alamat',
         'user_id'
     ];
 

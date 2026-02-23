@@ -9,9 +9,16 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ActivityLogController;
 
 //route get [authc class] -> name
-Route::get('/', [authController::class, 'showlogin']) -> name('login');
-Route::post('/login', [authController::class, 'login']) -> name('login.post');
-Route::post('/logout', [authController::class, 'logout']) -> name('logout');
+// Halaman Landing / Home
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+// Auth Routes
+Route::get('/login', [authController::class, 'showlogin'])->name('login');
+Route::post('/login', [authController::class, 'login'])->name('login.post');
+Route::post('/logout', [authController::class, 'logout'])->name('logout');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile/{id}', [UserController::class, 'showProfile'])->name('profile.show');

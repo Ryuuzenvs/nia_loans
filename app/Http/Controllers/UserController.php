@@ -184,7 +184,8 @@ public function updateProfile(Request $request, $id)
 //valid
     $request->validate([
         'name' => 'required|string|max:255',
-        'class' => 'required|string|max:50',
+        'alamat' => 'required|string|max:250',
+        'no_hp' => 'required|numeric',
     ]);
 
     
@@ -193,7 +194,8 @@ public function updateProfile(Request $request, $id)
         ['user_id' => $id], // for key
         [
             'name' => $request->name,
-            'class' => $request->class
+            'no_hp' => $request->no_hp,
+            'alamat' => $request->alamat
         ] 
     );
 

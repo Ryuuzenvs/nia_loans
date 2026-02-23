@@ -61,7 +61,7 @@ public function peminjamCreate() {
     $user = Auth::user();
     
     // Cek kolom nama/kelas di tabel borrowers sudah terisi
-    if (!$user->borrower || empty($user->borrower->name) || empty($user->borrower->class)) {
+    if (!$user->borrower || empty($user->borrower->name) || empty($user->borrower->no_hp)) {
         return redirect()->route('profile.show', $user->id)
             ->with('info', 'please complete your detail acccount.');
     }
@@ -126,7 +126,7 @@ public function peminjamCreate() {
 */
             //com all data
             DB::commit();
-            return back()->with('success', 'Berhasil meminjam alat!');
+            return back()->with('success', 'Berhasil meminjam!');
         } catch (\Exception $e) {
             //db rb
             DB::rollback();
@@ -148,7 +148,7 @@ public function peminjamCreate() {
 
 //cond
         if ($tool->stock < $loan->qty) {
-        return back()->with('error', 'Stok alat sudah tidak mencukupi untuk disetujui.');
+        return back()->with('error', 'Stok sudah tidak mencukupi untuk disetujui.');
     }
         // res
         $loan->update([
@@ -165,7 +165,7 @@ public function peminjamCreate() {
         // untuk $loan->borrower->username"
         // ]);
 
-        return back()->with('success', 'Alat telah diserahkan ke peminjam.');
+        return back()->with('success', ' telah diserahkan ke peminjam.');
     }
 
     public function returnTool($id)
@@ -213,7 +213,7 @@ public function peminjamCreate() {
                 "Alat ID {$tool->id} dikembalikan oleh Peminjam ID {$loan->borrower_id}. Denda: Rp {$denda}"
             ]);
             DB::commit();
-            return back()->with('success', 'Berhasil return alat!');
+            return back()->with('success', 'Berhasil return!');
         } catch (\Exception $e) {
             // rb m ge tmsg
             DB::rollback();
