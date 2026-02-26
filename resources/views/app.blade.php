@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="PinjamAlat - Sistem Peminjaman Alat">
+    <meta property="og:description" content="Kelola alat, monitoring denda, dan laporan rapi siap cetak.">
+    <meta property="og:image" content="https://placehold.co/600x400/6f42c1/ffffff?text=PinjamAlat+System">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="PinjamAlat - Sistem Peminjaman Alat">
+    <meta property="twitter:description" content="Kelola alat, monitoring denda, dan laporan rapi siap cetak.">
+    <meta property="twitter:image" content="https://placehold.co/600x400/6f42c1/ffffff?text=PinjamAlat+System">
     <title>@yield('title', 'PinjamAlat')</title>
     
     <link href="{{ asset('bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+..." crossorigin="anonymous">
+
     
     <style>
         /* Custom Purple Theme */

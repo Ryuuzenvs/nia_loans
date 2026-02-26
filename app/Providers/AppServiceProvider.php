@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\URL;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -34,5 +35,9 @@ Relation::enforceMorphMap([
     {
         Paginator::useBootstrapFive();
         date_default_timezone_set('Asia/Jakarta');
+
+        if (env('APP_ENV') !== 'local' || isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+        URL::forceScheme('https');
+    }
     }
 }
