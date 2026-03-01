@@ -63,8 +63,8 @@
 
             <div class="card-body p-5 pt-5 mt-5">
                 <div class="text-center mb-4">
-                    <h2 class="fw-bold mb-1">Book <span class="text-purple">Borrowing</span></h2>
-                    <p class="text-muted small">Login to continue to system</p>
+                    <h2 class="fw-bold mb-1">Peminjaman <span class="text-purple">Buku</span></h2>
+                    <p class="text-muted small">Login</p>
                 </div>
 
                 @if (session('success'))

@@ -13,13 +13,13 @@
         <table class="table table-bordered table-hover align-middle bg-white">
             <thead class="table-light">
                 <tr>
-                    <th class="text-start">Borrower</th>
-                    <th class="text-start">Tool</th>
+                    <th class="text-start">Peminjam</th>
+                    <th class="text-start">Alat</th>
                     <th class="text-center">Status</th>
                     <th class="text-end">qty</th>
-                    <th class="text-end">Loan date</th>
+                    <th class="text-end">Tanggal pinjam</th>
                     <th class="text-end">Deadline</th>
-                    <th class="text-end">Action</th>
+                    <th class="text-end">Aksi</th>
                 </tr>
             </thead>
 
@@ -89,7 +89,7 @@
 </div>
 <div class="mt-4">
 <a href="{{ route('users.create') }}" class="btn btn-primary">
-                <i class='fa-solid fa-plus'></i> Create user
+                <i class='fa-solid fa-plus'></i> Regis user
             </a>
 <a href="{{ route('officer.report') }}" class="btn btn-primary">
    Print Report

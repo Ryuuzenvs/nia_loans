@@ -14,6 +14,10 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/cs', function () {
+    return view('cs.html');
+})->name('cs');
+
 // Auth Routes
 Route::get('/login', [authController::class, 'showlogin'])->name('login');
 Route::post('/login', [authController::class, 'login'])->name('login.post');
@@ -26,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
     // cek role in contr 
     Route::put('/loans/return/{id}', [LoanController::class, 'returnTool'])->name('loans.return');
     Route::put('/loans/approve/{id}', [LoanController::class, 'approve'])->name('loans.approve');
-    Route::post('/pinjam.store', [LoanController::class, 'store'])->name('pinjam.store');
+    Route::post('/pinjam/store', [LoanController::class, 'store'])->name('pinjam.store');
 
 Route::middleware(['role:officer,admin'])->group(function () {
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create');

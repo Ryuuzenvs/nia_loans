@@ -15,8 +15,8 @@
                                 {{ strtoupper(substr($user->username, 0, 1)) }}
                             </div>
                             <div>
-                                <h5 class="mb-0 text-white fw-bold">Account Settings</h5>
-                                <small class="text-white-50">Manage your personal information</small>
+                                <h5 class="mb-0 text-white fw-bold">Akun</h5>
+                                <small class="text-white-50">Kelola data</small>
                             </div>
                         </div>
                         <span class="badge bg-white text-purple rounded-pill px-3 py-2 text-uppercase fw-bold shadow-sm">
@@ -43,7 +43,7 @@
                         @csrf
                         @method('PUT')
 
-                        <h6 class="text-purple fw-bold mb-3 mt-2"><i class="fas fa-info-circle me-2"></i>Account Information</h6>
+                        <h6 class="text-purple fw-bold mb-3 mt-2"><i class="fas fa-info-circle me-2"></i>Info akun</h6>
                         <div class="row g-3 mb-4">
                             <div class="col-md-6">
                                 <label class="form-label small fw-bold text-muted">Username</label>
@@ -63,10 +63,10 @@
 
                         <hr class="border-dashed my-4">
 
-                        <h6 class="text-purple fw-bold mb-3"><i class="fas fa-user-edit me-2"></i>Borrower Details</h6>
+                        <h6 class="text-purple fw-bold mb-3"><i class="fas fa-user-edit me-2"></i>Detail Peminjam</h6>
                         <div class="row g-3">
                             <div class="col-md-12 mb-2">
-                                <label class="form-label small fw-bold text-muted">Full Name</label>
+                                <label class="form-label small fw-bold text-muted">Nama lengkap</label>
                                 <input type="text" name="name" class="form-control @if(!$isOwner) bg-light @endif shadow-sm border-0 px-3 py-2" 
                                     value="{{ $user->borrower->name ?? '' }}" 
                                     placeholder="Enter your full name" 
@@ -74,7 +74,7 @@
                             </div>
 
                             <div class="col-md-6 mb-2">
-                                <label class="form-label small fw-bold text-muted">Phone Number (No. HP)</label>
+                                <label class="form-label small fw-bold text-muted">(No. HP)</label>
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text bg-white border-0"><i class="fas fa-phone text-muted"></i></span>
                                     <input type="number" name="no_hp" class="form-control @if(!$isOwner) bg-light @endif border-0 py-2" 
@@ -85,7 +85,7 @@
                             </div>
 
                             <div class="col-md-6 mb-2">
-                                <label class="form-label small fw-bold text-muted">Address (Alamat)</label>
+                                <label class="form-label small fw-bold text-muted">(Alamat)</label>
                                 <div class="input-group shadow-sm">
                                     <span class="input-group-text bg-white border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
                                     <input type="text" name="alamat" class="form-control @if(!$isOwner) bg-light @endif border-0 py-2" 
@@ -98,12 +98,12 @@
 
                         <div class="d-flex justify-content-between align-items-center mt-5">
                             <a href="javascript:history.back()" class="btn btn-link text-muted text-decoration-none px-0">
-                                <i class="fas fa-chevron-left me-1"></i> Back to Previous
+                                <i class="fas fa-chevron-left me-1"></i> Kembali
                             </a>
 
                             @if($isOwner)
                                 <button type="submit" class="btn btn-purple px-5 py-2 rounded-pill shadow-sm">
-                                    <i class="fas fa-save me-2"></i>Save Changes
+                                    <i class="fas fa-save me-2"></i>Simpan
                                 </button>
                             @endif
                         </div>

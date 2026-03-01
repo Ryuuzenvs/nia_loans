@@ -1,7 +1,7 @@
 @extends('app')
 @section('content')
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">Get loan</div>
+        <div class="card-header bg-primary text-white">Pinjam alat</div>
         <div class="card-body">
                 @if (session('success'))
                     <div class="alert alert-success py-2">{{ session('success') }}</div>

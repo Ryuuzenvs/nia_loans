@@ -6,8 +6,8 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark">User Management</h2>
-            <p class="text-muted small mb-0">Control access levels and manage system users</p>
+            <h2 class="fw-bold text-dark">Menejemen User</h2>
+            <p class="text-muted small mb-0">Kontrol User</p>
         </div>
         <div class="d-flex align-items-center gap-3">
             <span class="text-muted small d-none d-md-block">{{ auth()->user()->username }}</span>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-3">
                     <select name="role" class="form-select shadow-sm border-0">
-                        <option value="">All Roles</option>
+                        <option value="">Role</option>
                         <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         <option value="staff" {{ request('role') == 'staff' ? 'selected' : '' }}>Staff</option>
                         <option value="borrower" {{ request('role') == 'borrower' ? 'selected' : '' }}>Borrower</option>
@@ -36,14 +36,14 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-purple shadow-sm w-100">
-                        <i class="fas fa-search me-1"></i> Search
+                        <i class="fas fa-search me-1"></i> cari
                     </button>
                 </div>
             </form>
         </div>
         <div class="col-md-2 text-md-end mt-3 mt-md-0">
             <a href="{{ route('users.create') }}" class="btn btn-purple btn-sm shadow-sm w-100">
-                <i class="fas fa-user-plus me-1"></i> Add User
+                <i class="fas fa-user-plus me-1"></i> Tambah
             </a>
         </div>
     </div>
@@ -61,9 +61,9 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-secondary">
                         <tr>
-                            <th class="ps-4 py-3">Name & Email</th>
+                            <th class="ps-4 py-3">Nama, email</th>
                             <th class="py-3 text-center">Role</th>
-                            <th class="py-3 text-center" style="width: 200px;">Action</th>
+                            <th class="py-3 text-center" style="width: 200px;">aksi</th>
                         </tr>
                     </thead>
                     <tbody>

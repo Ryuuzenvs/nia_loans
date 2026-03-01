@@ -6,8 +6,8 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark">Category Management</h2>
-            <p class="text-muted small mb-0">Manage tool categories for inventory</p>
+            <h2 class="fw-bold text-dark">Kategori</h2>
+            <p class="text-muted small mb-0">Pantau kategori</p>
         </div>
         <div class="d-flex align-items-center gap-3">
             <span class="text-muted small d-none d-md-block">{{ auth()->user()->username }}</span>
@@ -25,13 +25,13 @@
                        class="form-control shadow-sm border-0 px-3" 
                        placeholder="Search category name..." style="max-width: 300px;">
                 <button type="submit" class="btn btn-purple shadow-sm">
-                    <i class="fas fa-search me-1"></i> Search
+                    <i class="fas fa-search me-1"></i> Cari
                 </button>
             </form>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm me-2 shadow-sm">
-                <i class="fas fa-arrow-left me-1"></i> Back
+                <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <a href="{{ route('category.create') }}" class="btn btn-purple btn-sm shadow-sm">
                 <i class="fas fa-plus me-1"></i> Tambah Kategori
@@ -42,6 +42,12 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm" role="alert">
             <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+ @if (session('error'))
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm" role="alert">
+            <i class="fas fa-times me-2"></i> {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -56,8 +62,8 @@
                     <thead class="bg-light text-secondary">
                         <tr>
                             <th class="ps-4 py-3" style="width: 80px;">No</th>
-                            <th class="py-3">Category Name</th>
-                            <th class="py-3 text-center" style="width: 200px;">Action</th>
+                            <th class="py-3">Kategori</th>
+                            <th class="py-3 text-center" style="width: 200px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

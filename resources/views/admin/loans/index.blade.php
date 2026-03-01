@@ -6,15 +6,15 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark">Loan Management</h2>
-            <p class="text-muted small mb-0">Monitor and manage all tool borrowing transactions</p>
+            <h2 class="fw-bold text-dark">Menejemen</h2>
+            <p class="text-muted small mb-0">Monitor peminjaman</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
-                <i class="fas fa-arrow-left me-1"></i> Back
+                <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <a href="{{ route('admin.loans.create') }}" class="btn btn-purple btn-sm rounded-pill px-3 shadow-sm">
-                <i class="fas fa-plus me-1"></i> Create Loan
+                <i class="fas fa-plus me-1"></i> Tambah
             </a>
         </div>
     </div>
@@ -32,13 +32,13 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-secondary">
                         <tr>
-                            <th class="ps-4 py-3">Borrower & Tool</th>
-                            <th class="py-3">Dates</th>
+                            <th class="ps-4 py-3">Peminjam dan Alat</th>
+                            <th class="py-3">Tanggal</th>
                             <th class="py-3 text-center">Status</th>
-                            <th class="py-3 text-center">Penalty</th>
+                            <th class="py-3 text-center">Denda</th>
                             <th class="py-3 text-center">qty</th>
-                            <th class="py-3">Approver</th>
-                            <th class="py-3 text-center pe-4">Action</th>
+                            <th class="py-3">Petugas</th>
+                            <th class="py-3 text-center pe-4">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,7 +90,7 @@
                                         <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
                                             <i class="fas fa-user-shield text-muted" style="font-size: 0.6rem;"></i>
                                         </div>
-                                        <small class="text-dark">{{ $l->approver->username ?? 'No Admin' }}</small>
+                                        <small class="text-dark">{{ $l->approver->username ?? 'Tidak ada' }}</small>
                                     </div>
                                 </td>
                                 <td class="text-center pe-4">

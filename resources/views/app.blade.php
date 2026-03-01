@@ -54,7 +54,7 @@
                 <ul class="navbar-nav ms-auto align-items-center">
                     @guest
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Home</a>
+                            <a class="nav-link" href="{{ route('home') }}">Beranda</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-purple ms-lg-3 px-4" href="{{ route('login') }}">Login</a>
@@ -64,20 +64,20 @@
                     @auth
                         @if ($user->role === 'admin')
                             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                            <a class="nav-link" href="{{ route('category.index') }}">Category</a>
-                            <a class="nav-link" href="{{ route('tools.index') }}">Tool</a>
+                            <a class="nav-link" href="{{ route('category.index') }}">Kategori</a>
+                            <a class="nav-link" href="{{ route('tools.index') }}">Alat</a>
                             <a class="nav-link" href="{{ route('users.index') }}">User</a>
-                            <a class="nav-link" href="{{ route('admin.loans.index') }}">Loan</a>
+                            <a class="nav-link" href="{{ route('admin.loans.index') }}">Pinjam</a>
                             <a class="nav-link" href="{{ route('admin.logs.index') }}">logs</a>
                         @elseif($user->role === 'officer')
-                            <a class="nav-link" href="{{ route('officer.dashboard') }}">Management</a>
+                            <a class="nav-link" href="{{ route('officer.dashboard') }}">Menejemen</a>
                             <a class="nav-link" href="{{ route('users.create') }}">Regis</a>
-                            <a class="nav-link" href="{{ route('officer.report') }}">report</a>
+                            <a class="nav-link" href="{{ route('officer.report') }}">Lapor</a>
                         @elseif($user->role === 'borrower')
-                            <a class="nav-link" href="{{ route('borrower.dashboard') }}">My Loans</a>
-                            <a class="nav-link" href="{{ route('borrower.pinjam') }}">Get Loans</a>
-                            <a class="nav-link" href="{{ route('borrower.history') }}">Get history</a>
-                            <a class="nav-link" href="{{ route('profile.show', auth()->id()) }}">Get profile</a>
+                            <a class="nav-link" href="{{ route('borrower.dashboard') }}">Menejemen</a>
+                            <a class="nav-link" href="{{ route('borrower.pinjam') }}">Pinjam</a>
+                            <a class="nav-link" href="{{ route('borrower.history') }}">Riwayat </a>
+                            <a class="nav-link" href="{{ route('profile.show', auth()->id()) }}">Profile</a>
                         @endif
 
                         <li class="nav-item ms-lg-3">

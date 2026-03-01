@@ -6,12 +6,12 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark mb-1">Activity Logs</h2>
-            <p class="text-muted small">Monitoring system events and user actions</p>
+            <h2 class="fw-bold text-dark mb-1">Log Aktifitas</h2>
+            <p class="text-muted small">Monitor Log</p>
         </div>
         <div>
             <button onclick="window.location.reload()" class="btn btn-soft-purple btn-sm rounded-pill px-3">
-                <i class="fas fa-sync-alt me-1"></i> Refresh Logs
+                <i class="fas fa-sync-alt me-1"></i> Perbarui Log
             </button>
         </div>
     </div>
@@ -19,7 +19,7 @@
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="card-header bg-white border-bottom py-3 px-4">
             <h5 class="mb-0 fw-bold text-slate-800">
-                <i class="fas fa-history text-purple me-2"></i>History Log List
+                <i class="fas fa-history text-purple me-2"></i>Riwajat Log
             </h5>
         </div>
 
@@ -30,7 +30,7 @@
                         <tr>
                             <th class="ps-4 py-3" width="80">No</th>
                             <th class="py-3" width="220">Timestamp</th>
-                            <th class="py-3">Activity Description</th>
+                            <th class="py-3">Kejadian</th>
                             <th class="py-3 text-end pe-4">Status</th>
                         </tr>
                     </thead>
@@ -63,7 +63,7 @@
                             </td>
                             <td class="text-end pe-4">
                                 <span class="badge bg-soft-success text-success rounded-pill px-3 py-2">
-                                    <i class="fas fa-check-circle me-1"></i> Recorded
+                                    <i class="fas fa-check-circle me-1"></i> Tercatat
                                 </span>
                             </td>
                         </tr>

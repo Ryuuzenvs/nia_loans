@@ -6,8 +6,8 @@
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-dark">Tools Management</h2>
-            <p class="text-muted small mb-0">Manage your inventory and stock levels</p>
+            <h2 class="fw-bold text-dark">Menejemen Alat</h2>
+            <p class="text-muted small mb-0">Pantau Alat</p>
         </div>
         <div class="d-flex align-items-center gap-3">
             <span class="text-muted small d-none d-md-block">{{ auth()->user()->username }}</span>
@@ -26,16 +26,16 @@
                     <input type="text" name="search" value="{{ request('search') }}" 
                            class="form-control border-0 px-2" 
                            placeholder="Search tools name...">
-                    <button type="submit" class="btn btn-purple px-4">Search</button>
+                    <button type="submit" class="btn btn-purple px-4">Cari</button>
                 </div>
             </form>
         </div>
         <div class="col-md-5 text-md-end mt-3 mt-md-0">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm me-2 shadow-sm">
-                <i class="fas fa-arrow-left me-1"></i> Back
+                <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <a href="{{ route('tools.create') }}" class="btn btn-purple btn-sm shadow-sm">
-                <i class="fas fa-plus me-1"></i> Create New Tool
+                <i class="fas fa-plus me-1"></i> Tambah
             </a>
         </div>
     </div>
@@ -53,11 +53,11 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-secondary">
                         <tr>
-                            <th class="ps-4 py-3">Tool Name</th>
-                            <th class="py-3">Category</th>
+                            <th class="ps-4 py-3">Alat</th>
+                            <th class="py-3">Kategori</th>
                             <th class="py-3 text-center">Stock</th>
-                            <th class="py-3 text-end">Price</th>
-                            <th class="py-3 text-center" style="width: 180px;">Actions</th>
+                            <th class="py-3 text-end">Harga</th>
+                            <th class="py-3 text-center" style="width: 180px;">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>

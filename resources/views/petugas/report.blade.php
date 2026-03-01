@@ -2,24 +2,24 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3 no-print">
-    <h3>Loan Report</h3>
+    <h3>Laporan</h3>
 </div>
 
 <div class="card mb-3 no-print">
     <div class="card-body">
         <form action="{{ route('officer.report') }}" method="GET" class="row g-3 mt-2">
             <div class="col-md-4">
-                <label>Start Date</label>
+                <label>Tanggal mulai</label>
                 <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
             </div>
             <div class="col-md-4">
-                <label>End Date</label>
+                <label>Tanggal akhir</label>
                 <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
             </div>
             <div class="col-md-2">
                 <label>Status</label>
                 <select name="status" class="form-control">
-                    <option value="">All</option>
+                    <option value="">Semua</option>
                     <option value="borrow" {{ request('status') == 'borrow' ? 'selected' : '' }}>Borrowed</option>
                     <option value="return" {{ request('status') == 'return' ? 'selected' : '' }}>Returned</option>
                 </select>
@@ -40,12 +40,13 @@
         <table class="table table-striped align-middle">
             <thead class="table-light">
                 <tr>
-                    <th class="text-start">Borrower</th>
-                    <th class="text-start">Tool</th>
-                    <th class="text-end">Loan Date</th>
-                    <th class="text-end">Return Date</th>
+                    <th class="text-start">Peminjam</th>
+                    <th class="text-start">Alat</th>
+                    <th class="text-end">Tanggal Pinjam</th>
+                    <th class="text-end">Tanggal kembali</th>
                     <th class="text-center">Status</th>
-                    <th class="text-end">Penalty</th>
+                    <th class="text-end">Qty</th>
+                    <th class="text-end">Denda</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,6 +68,9 @@
                             }}">
                             {{ ucfirst($r->status) }}
                         </span>
+                    </td>
+ <td class="text-end fw-semibold">
+                        Rp {{ number_format($r->qty, 0, ',', '.') }}
                     </td>
                     <td class="text-end fw-semibold">
                         Rp {{ number_format($r->penalty, 0, ',', '.') }}

@@ -1,0 +1,578 @@
+sebelum paham dulu detail, jelas harus paham fundamental, pondasi yang penting karna kalau bagian awalny bisa paham, ga sesusah itu untuk paham detailnya
+
+1. perlu paham dlu konsep mvc
+
+ngoding pake laravel perlu paham dlu konsep mvc, simple tapi bakalan bagus kalau udah paham
+
+model, view, controller
+
+sebelum kita ke model, kita perlu kenalan dlu sama setup database, yaitu migration dan seeder, dimana simple ny mereka ini adaalkh yang bakalan jadi setup awal database kita jadi makin rapi
+
+jelasin cara bikin migration simple ny disini
+
+dan ini skema utama logika dari tabel peminjaman ny
+public function up(): void
+    {
+        Schema::create('loans', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('borrower_id')->constrained('users');
+            $table->foreignId('tool_id')->constrained('tools');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set Null');
+            $table->enum('approve_type',['admin', 'officer'])->nullable();
+            $table->enum('status',['pending', 'borrow', 'return'])->default('pending');
+            $table->integer('qty')->default(1);
+            $table->integer('penalty')->default(0);
+            $table->date('due_date');
+            $table->date('return_date')->nullable();
+            $table->date('loan_date');
+            $table->timestamp('request_return_date')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+
+DB::unprepared("
+        CREATE FUNCTION hitung_denda(p_tool_id INT, p_qty INT, tgl_due DATE, tgl_return DATE) 
+        RETURNS DECIMAL(15,2)
+        DETERMINISTIC
+        BEGIN
+            DECLARE v_harga_alat DECIMAL(15,2);
+            DECLARE v_selisih_hari INT;
+            DECLARE v_denda_per_hari DECIMAL(15,2);
+            DECLARE v_total_denda DECIMAL(15,2) DEFAULT 0;
+            
+            -- Ambil harga alat dari tabel tools
+            SELECT price INTO v_harga_alat FROM tools WHERE id = p_tool_id;
+            
+            -- Hitung selisih hari (Hanya jika telat)
+            SET v_selisih_hari = DATEDIFF(tgl_return, tgl_due);
+            
+            IF v_selisih_hari > 0 THEN
+                -- Rumus: 1% dari harga alat
+                SET v_denda_per_hari = 0.01 * v_harga_alat;
+                -- Total: (Denda per hari * hari telat) * jumlah barang
+                SET v_total_denda = (v_denda_per_hari * v_selisih_hari) * p_qty;
+            END IF;
+            
+            RETURN v_total_denda;
+        END
+
+jelasin logika denda simple ny disini
+
+setelah kita migration, kita bisa langsung  aja isi databaseny tanpa perlu ke host ny yaitu phpmyadmin
+<?php
+namespace Database\Seeders;
+
+use App\Models\User;
+use App\Models\category;
+use App\Models\tool;
+use Illuminate\Database\Seeder;
+
+class DatabaseSeeder extends Seeder
+{
+    public function run(): void
+    {
+        User::factory()->admin()->create();   
+        User::factory()->officer()->create(); 
+        User::factory()->nia()->create(); 
+//        User::factory(5)->create();           
+
+        category::insert([
+            ['nama_kategori' => 'Buku Novel', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Buku Pelajaran', 'created_at' => now(), 'updated_at' => now()],
+            ['nama_kategori' => 'Buku Sejarah', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        tool::insert([
+            ['name_tools' => 'Novel', 'category_id' => 1, 'stock' => 10, 'created_at' => now(), 'price' => 1000],
+            ['name_tools' => 'mtk', 'category_id' => 2, 'stock' => 10, 'created_at' => now(),'price' => 2000],
+            ['name_tools' => 'Sejarah', 'category_id' => 3, 'stock' => 10, 'created_at' => now(),'price' => 3000],
+        ]);
+    }
+}
+
+
+jelasin seeder gampang ny disini
+setelah kita seeder barulah kita fokus isi kolom apa apaa jaa yang ada didatabase kita,inilah fungsi dari model 
+contoh dari loan model 
+
+<?php
+
+namespace App\Models;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+class loan extends Model
+{
+    //
+    use SoftDeletes;
+    protected $fillable = [
+    'borrower_id',   
+    'tool_id',
+    'approved_by',   
+    'loan_date',
+    'penalty',
+    'return_date',
+    'status',
+'qty',
+'due_date',
+    'request_return_date'
+];
+
+// Relasi to borrower
+public function borrower() {
+    return $this->belongsTo(User::class, 'borrower_id'); 
+}
+
+public function approver() {
+    return $this->belongsTo(User::class, 'approved_by'); 
+}
+
+public function tool() {
+    return $this->belongsTo(tool::class, 'tool_id');
+}
+}
+
+jelasin simpleny disini
+
+setelah kita udah punya modelny, barulah kita bisa pake dia ke controller kita dengan memanggil 
+use App\Models\loan; atau nama class model sesuai namany
+
+lalu kita bisa langsung ke route kita
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\authController;
+use App\Http\Controllers\ToolController;      
+use App\Http\Controllers\CategoryController;  
+use App\Http\Controllers\LoanController;  
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ActivityLogController;
+
+//route get [authc class] -> name
+// Halaman Landing / Home
+Route::get('/', function () {
+    return view('home');
+})->name('home');
+
+// Auth Routes
+Route::get('/login', [authController::class, 'showlogin'])->name('login');
+Route::post('/login', [authController::class, 'login'])->name('login.post');
+Route::post('/logout', [authController::class, 'logout'])->name('logout');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/{id}', [UserController::class, 'showProfile'])->name('profile.show');
+
+    // cek role in contr 
+    Route::put('/loans/return/{id}', [LoanController::class, 'returnTool'])->name('loans.return');
+    Route::put('/loans/approve/{id}', [LoanController::class, 'approve'])->name('loans.approve');
+    Route::post('/pinjam/store', [LoanController::class, 'store'])->name('pinjam.store');
+
+Route::middleware(['role:officer,admin'])->group(function () {
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    });
+
+//ro midl([aut, 'role:']) ->group(func(){  })
+Route::middleware(['auth', 'role:admin'])->group(function () {
+
+Route::resource('tools', ToolController::class);
+Route::resource('users', UserController::class)->except(['create', 'store']);
+Route::resource('category', CategoryController::class);
+
+//ro get (role das, func () {ret viw(role.i); })->name rol das
+Route::get('/admin/dashboard', function() { return view('admin.index');   })-> name('admin.dashboard');
+Route::get('/admin/logs', [ActivityLogController::class, 'index'])->name('admin.logs.index');
+
+Route::delete('/loans/{id}', [LoanController::class, 'destroy'])->name('loans.destroy');
+Route::get('/admin/loans', [LoanController::class, 'adminIndex'])->name('admin.loans.index');
+Route::get('/admin/loans/{id}/edit', [LoanController::class, 'edit'])->name('admin.loans.edit');
+Route::get('/admin/loans/create', [LoanController::class, 'create'])->name('admin.loans.create');
+//ro rescr for crud tool
+Route::put('/admin/loans/{id}', [LoanController::class, 'update'])->name('admin.loans.update');
+    
+});
+
+//ro midl([aut, 'role:']) ->group(func(){  })
+Route::middleware(['role:officer'])->group(function () {
+//ro get (role das, func () {ret viw(role.i); })->name rol das
+Route::get('/officer/dashboard', [LoanController::class, 'petugasIndex'])->name('officer.dashboard');
+Route::get('/officer/report', [LoanController::class, 'report'])->name('officer.report');
+
+//Route::get('/officer/register-borrower', [UserController::class, 'create'])->name('officer.user.create');
+//Route::post('/officer/register-borrower', [UserController::class, 'store'])->name('officer.user.store');
+});
+
+
+
+//ro midl([aut, 'role:']) ->group(func(){  })
+Route::middleware(['auth', 'role:borrower'])->group(function () {
+    // Menu 1: Dashboard / Status Pinjaman (Gimmick Return ada di sini)
+    Route::get('/borrower/dashboard', [LoanController::class, 'peminjamIndex'])->name('borrower.dashboard');
+    
+    // Menu 2: Form Pinjam Alat
+    Route::get('/borrower/pinjam', [LoanController::class, 'peminjamCreate'])->name('borrower.pinjam');
+    
+    // Menu 3: Riwayat Pengembalian
+    Route::get('/borrower/history', [LoanController::class, 'peminjamHistory'])->name('borrower.history');
+
+    Route::put('/profile/{id}/update', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/loans/request-return/{id}', [LoanController::class, 'requestReturn'])->name('loans.requestReturn');
+});
+
+});
+
+
+jelasin simple ny disini
+
+contoh kasus kita mau akses Route::get('/admin/loans', [LoanController::class, 'adminIndex'])->name('admin.loans.index');
+
+maka kita cukup liat file nama controller kita itu, serta class ny ada ga, kalau ada gimana bentukny
+contoh class admin index pada laon controller
+
+public function adminIndex()
+    {
+        //   data by class bor, tool, lat get
+        $loans = loan::with(['borrower', 'tool', 'approver'])->latest()->paginate(5);
+        return view('admin.loans.index', compact('loans'));
+    }
+
+
+jelasin simpleny disini
+
+dan yap, kita masuk ke logika yg sbrnanya simple tpi emg perlu dipelajari pada loan controller 
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\tool;
+use App\Models\loan;
+use App\Models\User;
+use \App\Models\ActivityLog;
+//use App\Models\Borrower;
+use App\Http\Controllers\Controller;
+//use ilum.supp.fas.db n auth
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+//use carb/carb
+use Carbon\Carbon;
+
+class LoanController extends Controller
+{
+    //
+    public function adminIndex()
+    {
+        //   data by class bor, tool, lat get
+        $loans = loan::with(['borrower', 'tool', 'approver'])->latest()->paginate(5);
+        return view('admin.loans.index', compact('loans'));
+    }
+
+    public function petugasIndex()
+    {
+        //    $ tools = tool:wher(stok,>,0)>get()
+        //get req item
+        $tools = tool::where('stock', '>', 0)->get();
+        //    $ loan  = loan:wher(us_id, auth::id())>with('tool')>last()>get()
+        //   data by class bor, tool, lat get
+        $loans = loan::with(['borrower', 'tool'])->latest()->get();
+        // ret view (pem.ind, comp var)
+        return view('petugas.index', compact('tools', 'loans'));
+    }
+
+   public function peminjamIndex() {
+    $borrowerId = Auth::id();
+    // Ambil yang statusnya 'pending' atau 'borrow'
+    $myloan = loan::where('borrower_id', $borrowerId)
+                ->whereIn('status', ['pending', 'borrow', 'return'])
+                ->with('tool')
+                ->latest()
+                ->get();
+    return view('peminjam.index', compact('myloan'));
+}
+
+public function peminjamHistory() {
+    $borrowerId = Auth::id();
+    $history = loan::where('borrower_id', $borrowerId)
+                ->where('status', 'return')
+                ->with('tool')
+                ->latest()
+                ->get();
+    return view('peminjam.return', compact('history'));
+}
+public function peminjamCreate() {
+    $user = Auth::user();
+    
+    // Cek kolom nama/kelas di tabel borrowers sudah terisi
+    if (!$user->borrower || empty($user->borrower->name) || empty($user->borrower->no_hp)) {
+        return redirect()->route('profile.show', $user->id)
+            ->with('info', 'please complete your detail acccount.');
+    }
+
+    $tools = tool::where('stock', '>', 0)->get();
+    return view('peminjam.loan', compact('tools'));
+}
+    public function create()
+    {
+        // cek role whres user
+        // conf
+        $users = User::where('role', '=', 'borrower')->get();
+        // get tool whers stock
+        $tools = tool::where('stock', '>', 0)->get();
+
+        return view('admin.loans.create', compact('users', 'tools'));
+    }
+
+
+    public function store(Request $request)
+    {
+        // valid tool id need
+        $request->validate(['tool_id' => 'required']);
+
+        // start store
+        DB::beginTransaction();
+        // try the case
+        try {
+            $tool = tool::findOrFail($request->tool_id);
+            $qtyInput = $request->qty ?? 1;
+            if ($tool->stock < $qtyInput) {
+            return back()->with('error', 'Stok tidak mencukupi! Sisa stok: ' . $tool->stock);
+        }
+            // get tool id
+
+            // ret
+            if ($tool->stock <= 0) return back()->with('error', 'Stok habis!');
+
+            // logic get ID n usn
+            $borrowerId = $request->has('user_id') ? $request->user_id : Auth::id();
+
+            // tool->decr(stock )
+            //$tool->decrement('stock');
+            $dueDate = Carbon::now()->addDays(1);
+            //create loan([loan row])
+            // $loan = 
+            loan::create([
+                //if thres no usr_id, get aut id
+                'borrower_id' => $borrowerId,
+                'tool_id' => $tool->id,
+                'due_date'    => $dueDate, // SOLUSI ERROR TADI
+                'qty'         => $qtyInput, // Menangani multistock
+                'status'      => 'pending',
+                'loan_date' => Carbon::now()
+            ]);
+
+            // LOGGING
+            /* Catatan: Stok JANGAN dikurangi di sini (store),
+        ActivityLog::create([
+            'data' => "[PINJAM] $borrowerName meminjam alat: $tool->name_tools (ID Pinjam: $loan->id)"
+        ]);
+*/
+            //com all data
+            DB::commit();
+            return back()->with('success', 'Berhasil meminjam!');
+        } catch (\Exception $e) {
+            //db rb
+            DB::rollback();
+            //dd($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function approve($id)
+    {
+        // $user = Auth::user();
+        //    loan = loan:finfil(id)
+        // conf
+        $loan = loan::with('borrower', 'tool')->findOrFail($id);
+        //loan > upd =([ status boro, admin id =>  id()])
+            $tool = tool::findOrFail($loan->tool_id);
+        // login, Cek guard
+        $approver = Auth::user();
+
+//cond
+        if ($tool->stock < $loan->qty) {
+        return back()->with('error', 'Stok sudah tidak mencukupi untuk disetujui.');
+    }
+        // res
+        $loan->update([
+            'status' => 'borrow',
+            'approved_by' => $approver->id,
+        ]);
+
+        // LOGGING
+        // ActivityLog::create([
+        //     'data' => "[APPROVE] 
+        // Alat $loan->tool->name_tools 
+        // (Data Pinjam ID: $id) 
+        // di-acc $approver->username 
+        // untuk $loan->borrower->username"
+        // ]);
+
+        return back()->with('success', ' telah diserahkan ke peminjam.');
+    }
+
+    public function returnTool($id)
+    {
+        // start func
+        DB::beginTransaction();
+        try {
+            // conf
+            $loan = loan::findOrFail($id);
+            $user = Auth::user();
+            $tool = tool::findOrFail($loan->tool_id);
+
+            // car loan obj - loandate
+            $loandate = Carbon::parse($loan->loan_date);
+            // car now
+            $returndate = Carbon::now();
+            // $selisih = $loandate->diffInDays($returndate);
+
+            // $denda = 0;
+
+            // // cond
+            // if($selisih > 3) {
+            //     $denda = ($selisih - 3) *  1000;
+            // }
+            $result = DB::select("SELECT hitung_denda(?, ?, ? , ?) as total_denda", [
+                $loan->tool_id,
+                $loan->qty,
+                $loan->due_date,
+                $returndate
+            ]);
+            $denda = $result[0]->total_denda;
+            // res
+            $loan->update([
+                'return_date' => $returndate,
+                'status' => 'return',
+                'penalty' => $denda,
+                'approved_by' => $user->id,
+            ]);
+
+            // res 1
+            //$tool->increment('stock');
+
+            // comm
+            DB::statement("CALL sp_log_activity(?)", [
+                "Alat ID {$tool->id} dikembalikan oleh Peminjam ID {$loan->borrower_id}. Denda: Rp {$denda}"
+            ]);
+            DB::commit();
+            return back()->with('success', 'Berhasil return!');
+        } catch (\Exception $e) {
+            // rb m ge tmsg
+            DB::rollback();
+            // dd($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function report(Request $request)
+    {
+        // cont get data
+        $query = loan::with(['borrower', 'tool']);
+
+        //  simple filter  if there a req
+        // 
+        // if ($request->status) {
+        //     $query->where('status', $request->status);
+        // }
+
+        $query->when($request->start_date && $request->end_date, function ($q) use ($request) {
+            return $q->whereBetween('loan_date', [$request->start_date, $request->end_date]);
+        });
+
+        $reports = $query->latest()->get();
+        return view('petugas.report', compact('reports'));
+    }
+
+    public function edit($id)
+    {
+        // conf 
+        $loan = loan::with(['borrower', 'tool'])->findOrFail($id);
+        $users = User::where('role', 'borrower')->get();
+        $tools = tool::all();
+        // ret
+        return view('admin.loans.edit', compact('loan', 'users', 'tools'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // conf
+        $loan = loan::findOrFail($id);
+        $user = Auth::user();
+        // if (!$user) {
+        //     $user = Auth::user();
+        // }
+
+        // cond
+        if (!$user) return redirect()->route('login')->with('error', 'Login!');
+
+        if ($request->has('action') && $request->action == 'return') {
+            return $this->returnTool($id);
+        }
+
+        $data = $request->all();
+        // rew
+        $data['approved_by'] = $user->id;
+        // res
+        $loan->update($data);
+        return redirect()->route('admin.loans.index')->with('success', 'Data peminjaman diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        // conf
+        $loan = loan::findOrFail($id);
+        // condition - stock, stock++
+//        if ($loan->status != 'return') {
+//            // inc
+//            tool::where('id', $loan->tool_id)->increment('stock');
+//        }
+//
+        // res
+        $loan->delete();
+        return back()->with('success', 'Data transaksi dihapus & stok disesuaikan.');
+    }
+
+    public function requestReturn($id)
+{
+    $loan = loan::findOrFail($id);
+
+    if ($loan->borrower_id != Auth::id()) {
+        return back()->with('error', 'Tidak diizinkan.');
+    }
+
+    if ($loan->status === 'borrow' && !$loan->request_return_date) {
+        $loan->update([
+            'request_return_date' => Carbon::now()
+        ]);
+
+        return back()->with('success', 'Permintaan pengembalian dikirim. Tunggu verifikasi petugas.');
+    }
+
+    return back()->with('error', 'Permintaan sudah diajukan atau tidak valid.');
+}
+
+}
+
+jelasin simpleny disini
+
+untuk view, kita sebenrnya bisa abaikan mengigat kita tidak perlu memahami bnayak synatax di view, contoh kita cukup perlu mengambil data yg udah kita compact tadi di adminindex ublic function adminIndex()
+    {
+        //   data by class bor, tool, lat get
+        $loans = loan::with(['borrower', 'tool', 'approver'])->latest()->paginate(5);
+        return view('admin.loans.index', compact('loans'));
+    } 
+
+bagian compact('loans')) ke dalam view kita dengan cara 
+\                        @foreach ($loans as $l)
+
+dan kita panggil data data kita dengna cara
+
+                                    <div class="fw-bold text-dark">{{ $l->borrower->username }}</div>
+
+cukup simplekan?
+
+copyright ryuu

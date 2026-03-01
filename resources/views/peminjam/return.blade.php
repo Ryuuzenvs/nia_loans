@@ -9,10 +9,10 @@
         <table class="table table-striped align-middle">
             <thead class="table-light">
                 <tr>
-                    <th class="text-start">Tool</th>
-                    <th class="text-end">Loan Date</th>
-                    <th class="text-end">Return date</th>
-                    <th class="text-end">penalty</th>
+                    <th class="text-start">Alat</th>
+                    <th class="text-end">Tanggal pinjam</th>
+                    <th class="text-end">Tanggal Kembali</th>
+                    <th class="text-end">Denda</th>
                 </tr>
             </thead>
 
