@@ -35,12 +35,20 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['role:officer,admin'])->group(function () {
         Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+Route::resource('tools', ToolController::class);
+Route::delete('/loans/{id}', [LoanController::class, 'destroy'])->name('loans.destroy');
+Route::get('/admin/loans', [LoanController::class, 'adminIndex'])->name('admin.loans.index');
+Route::get('/admin/loans/{id}/edit', [LoanController::class, 'edit'])->name('admin.loans.edit');
+Route::get('/admin/loans/create', [LoanController::class, 'create'])->name('admin.loans.create');
+//ro rescr for crud tool
+Route::put('/admin/loans/{id}', [LoanController::class, 'update'])->name('admin.loans.update');
     });
 
 //ro midl([aut, 'role:']) ->group(func(){  })
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
-Route::resource('tools', ToolController::class);
+
 Route::resource('users', UserController::class)->except(['create', 'store']);
 Route::resource('category', CategoryController::class);
 
@@ -48,13 +56,6 @@ Route::resource('category', CategoryController::class);
 Route::get('/admin/dashboard', function() { return view('admin.index');   })-> name('admin.dashboard');
 Route::get('/admin/logs', [ActivityLogController::class, 'index'])->name('admin.logs.index');
 
-Route::delete('/loans/{id}', [LoanController::class, 'destroy'])->name('loans.destroy');
-Route::get('/admin/loans', [LoanController::class, 'adminIndex'])->name('admin.loans.index');
-Route::get('/admin/loans/{id}/edit', [LoanController::class, 'edit'])->name('admin.loans.edit');
-Route::get('/admin/loans/create', [LoanController::class, 'create'])->name('admin.loans.create');
-//ro rescr for crud tool
-Route::put('/admin/loans/{id}', [LoanController::class, 'update'])->name('admin.loans.update');
-    
 });
 
 //ro midl([aut, 'role:']) ->group(func(){  })

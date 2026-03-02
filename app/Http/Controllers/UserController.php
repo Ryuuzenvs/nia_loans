@@ -52,11 +52,13 @@ class UserController extends Controller
     
         if (auth()->user()->role === 'admin') {
         $rules['role'] = 'required|in:admin,officer,borrower';
+        } else if (auth()->user()->role === 'officer') {
+        $rules['role'] = 'required|in:officer,borrower';
         }
         
         $validated = $request->validate($rules);
 
-        $finalRole = (auth()->user()->role === 'admin') ? $request->role : 'borrower';
+        $finalRole = $validated['role'] ?? 'borrower';
 
         //create data
        User::create([

@@ -31,7 +31,7 @@
             </form>
         </div>
         <div class="col-md-5 text-md-end mt-3 mt-md-0">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm me-2 shadow-sm">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm me-2 shadow-sm">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <a href="{{ route('tools.create') }}" class="btn btn-purple btn-sm shadow-sm">

@@ -43,21 +43,20 @@
                 <input type="password" name="password_confirmation" class="form-control" placeholder="Re-enter password" required>
             </div>
 
-            @if(auth()->user()->role === 'admin')
+
     <div class="mb-3">
         <label class="form-label">Role</label>
         <select name="role" class="form-control" required>
             <option value="" disabled selected>Select role</option>
             <option value="borrower">Borrower</option>
             <option value="officer">Officer</option>
+            @if(auth()->user()->role === 'admin')
             <option value="admin">Admin</option>
+@endif
         </select>
     </div>
-@else
-    <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> Role otomatis diset sebagai: <strong>Borrower</strong>
-    </div>
-@endif
+
+
 
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit" class="btn btn-primary">

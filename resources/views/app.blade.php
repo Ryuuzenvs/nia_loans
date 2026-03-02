@@ -71,6 +71,8 @@
                             <a class="nav-link" href="{{ route('admin.logs.index') }}">logs</a>
                         @elseif($user->role === 'officer')
                             <a class="nav-link" href="{{ route('officer.dashboard') }}">Menejemen</a>
+                            <a class="nav-link" href="{{ route('tools.index') }}">Alat</a>
+                            <a class="nav-link" href="{{ route('admin.loans.index') }}">Pinjam</a>
                             <a class="nav-link" href="{{ route('users.create') }}">Regis</a>
                             <a class="nav-link" href="{{ route('officer.report') }}">Lapor</a>
                         @elseif($user->role === 'borrower')

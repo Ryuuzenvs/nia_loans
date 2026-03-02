@@ -10,7 +10,7 @@
             <p class="text-muted small mb-0">Monitor peminjaman</p>
         </div>
         <div class="d-flex gap-2">
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             <a href="{{ route('admin.loans.create') }}" class="btn btn-purple btn-sm rounded-pill px-3 shadow-sm">
@@ -157,4 +157,5 @@
         background-color: #f8f9fa;
     }
 </style>
+
 @endsection

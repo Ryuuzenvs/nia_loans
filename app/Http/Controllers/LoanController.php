@@ -84,7 +84,10 @@ public function peminjamCreate() {
     public function store(Request $request)
     {
         // valid tool id need
-        $request->validate(['tool_id' => 'required']);
+        $request->validate([
+'tool_id' => 'required',
+'qty' => 'required|integer|min:1'
+]);
 
         // start store
         DB::beginTransaction();
