@@ -24,6 +24,10 @@
                     <option value="return" {{ request('status') == 'return' ? 'selected' : '' }}>Returned</option>
                 </select>
             </div>
+            <div class="col-md-2">
+                <label>username</label>
+                <input name="username" type="text" class="form-control" value="{{ request('username') }}">
+            </div>
             <div class="col-md-2 d-flex align-items-end">
                 <button type="submit" class="btn btn-success w-100">Filter</button>
             </div>

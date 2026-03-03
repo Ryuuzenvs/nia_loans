@@ -232,9 +232,15 @@ public function peminjamCreate() {
 
         //  simple filter  if there a req
         // 
-        // if ($request->status) {
-        //     $query->where('status', $request->status);
-        // }
+         if ($request->status) {
+             $query->where('status', $request->status);
+         }
+
+       $query->when($request->username, function ($q) use ($request) {
+        return $q->whereHas('borrower', function ($userQuery) use ($request) {
+            $userQuery->where('username', 'like', '%' . $request->username . '%');
+        });
+    });
 
         $query->when($request->start_date && $request->end_date, function ($q) use ($request) {
             return $q->whereBetween('loan_date', [$request->start_date, $request->end_date]);
