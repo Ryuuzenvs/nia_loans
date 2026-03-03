@@ -22,6 +22,7 @@
                     <option value="">Semua</option>
                     <option value="borrow" {{ request('status') == 'borrow' ? 'selected' : '' }}>Borrowed</option>
                     <option value="return" {{ request('status') == 'return' ? 'selected' : '' }}>Returned</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>pending</option>
                 </select>
             </div>
             <div class="col-md-2">
