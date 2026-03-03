@@ -43,7 +43,7 @@
         <div class="container">
             @php $user = Auth::user(); @endphp
             <a class="navbar-brand fw-bold" href="{{ route('home') }}">
-                <i class="fas fa-tools me-2 text-purple"></i>PinjamAlat
+                <i class="fas fa-tools me-2 text-purple"></i>Pinjambuku
             </a>
             
             <button class="navbar-expand-lg navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -65,18 +65,18 @@
                         @if ($user->role === 'admin')
                             <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                             <a class="nav-link" href="{{ route('category.index') }}">Kategori</a>
-                            <a class="nav-link" href="{{ route('tools.index') }}">Alat</a>
+                            <a class="nav-link" href="{{ route('tools.index') }}">Buku</a>
                             <a class="nav-link" href="{{ route('users.index') }}">User</a>
                             <a class="nav-link" href="{{ route('admin.loans.index') }}">Pinjam</a>
                             <a class="nav-link" href="{{ route('admin.logs.index') }}">logs</a>
                         @elseif($user->role === 'officer')
-                            <a class="nav-link" href="{{ route('officer.dashboard') }}">Menejemen</a>
-                            <a class="nav-link" href="{{ route('tools.index') }}">Alat</a>
+                            <a class="nav-link" href="{{ route('officer.dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ route('tools.index') }}">Buku</a>
                             <a class="nav-link" href="{{ route('admin.loans.index') }}">Pinjam</a>
                             <a class="nav-link" href="{{ route('users.create') }}">Regis</a>
-                            <a class="nav-link" href="{{ route('officer.report') }}">Lapor</a>
+                            <a class="nav-link" href="{{ route('officer.report') }}">report</a>
                         @elseif($user->role === 'borrower')
-                            <a class="nav-link" href="{{ route('borrower.dashboard') }}">Menejemen</a>
+                            <a class="nav-link" href="{{ route('borrower.dashboard') }}">Dashboard</a>
                             <a class="nav-link" href="{{ route('borrower.pinjam') }}">Pinjam</a>
                             <a class="nav-link" href="{{ route('borrower.history') }}">Riwayat </a>
                             <a class="nav-link" href="{{ route('profile.show', auth()->id()) }}">Profile</a>

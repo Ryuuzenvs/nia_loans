@@ -72,6 +72,12 @@
                                     placeholder="Enter your full name" 
                                     {{ $isOwner ? 'required' : 'readonly' }}>
                             </div>
+                            <div class="col-md-12 mb-2">
+                                <label class="form-label small fw-bold text-muted">password</label>
+                                <input type="text" name="password" class="form-control @if(!$isOwner) bg-light @endif shadow-sm border-0 px-3 py-2" 
+                                    placeholder="Enter your full password" 
+                                    {{ $isOwner ? '' : 'readonly' }}>
+                            </div>
 
                             <div class="col-md-6 mb-2">
                                 <label class="form-label small fw-bold text-muted">(No. HP)</label>

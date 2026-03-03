@@ -10,7 +10,7 @@
             </a>
         </div>
 
-        <h3 class="text-center mb-4">Edit Tool</h3>
+        <h3 class="text-center mb-4">Edit Book</h3>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -21,7 +21,7 @@
             @method('PUT')
 
             <div class="mb-3">
-                <label class="form-label">Tool Name</label>
+                <label class="form-label">Book Name</label>
                 <input type="text" name="name_tools" value="{{ $tools->name_tools }}" class="form-control" required>
             </div>
 

@@ -188,7 +188,15 @@ public function updateProfile(Request $request, $id)
         'name' => 'required|string|max:255',
         'alamat' => 'required|string|max:250',
         'no_hp' => 'required|numeric',
+        'password' => 'nullable|string|min:8',
     ]);
+    $user = User::findOrFail($id);  
+
+    // Konsep nimpa: Hanya update jika input password diisi
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+        $user->save();
+    }
 
     
     // updateOrCreate   

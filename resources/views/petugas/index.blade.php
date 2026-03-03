@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-<h3 class="mb-3">Loans Manegement</h3>
+<h3 class="mb-3">Dashboard</h3>
 @if (session('success'))
                     <div class="alert alert-success py-2">{{ session('success') }}</div>
                 @endif

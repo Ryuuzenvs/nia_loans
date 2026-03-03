@@ -10,7 +10,7 @@
             </a>
         </div>
 
-        <h3 class="text-center mb-4">Create Tool</h3>
+        <h3 class="text-center mb-4">Create Book</h3>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -20,7 +20,7 @@
             @csrf
 
             <div class="mb-3">
-                <label class="form-label">Tool Name</label>
+                <label class="form-label">Book Name</label>
                 <input type="text" name="name_tools" class="form-control" required>
             </div>
 

@@ -41,7 +41,7 @@
             <thead class="table-light">
                 <tr>
                     <th class="text-start">Peminjam</th>
-                    <th class="text-start">Alat</th>
+                    <th class="text-start">Buku</th>
                     <th class="text-end">Tanggal Pinjam</th>
                     <th class="text-end">Tanggal kembali</th>
                     <th class="text-center">Status</th>
@@ -70,7 +70,7 @@
                         </span>
                     </td>
  <td class="text-end fw-semibold">
-                        Rp {{ number_format($r->qty, 0, ',', '.') }}
+                         {{ number_format($r->qty, 0, ',', '.') }}
                     </td>
                     <td class="text-end fw-semibold">
                         Rp {{ number_format($r->penalty, 0, ',', '.') }}
