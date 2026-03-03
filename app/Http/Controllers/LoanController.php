@@ -83,60 +83,56 @@ public function peminjamCreate() {
 
     public function store(Request $request)
     {
-        // valid tool id need
-        $request->validate([
-'tool_id' => 'required',
-'qty' => 'required|integer|min:1'
-]);
+    // Validasi dasar
+    $request->validate([
+        'items' => 'required|array',
+    ]);
 
-        // start store
-        DB::beginTransaction();
-        // try the case
-        try {
-            $tool = tool::findOrFail($request->tool_id);
-            $qtyInput = $request->qty ?? 1;
-            if ($tool->stock < $qtyInput) {
-            return back()->with('error', 'Stok tidak mencukupi! Sisa stok: ' . $tool->stock);
-        }
-            // get tool id
+    // Ambil hanya item yang qty nya > 0
+    $selectedItems = collect($request->items)->filter(function ($item) {
+        return isset($item['qty']) && $item['qty'] > 0;
+    });
 
-            // ret
-            if ($tool->stock <= 0) return back()->with('error', 'Stok habis!');
-
-            // logic get ID n usn
-            $borrowerId = $request->has('user_id') ? $request->user_id : Auth::id();
-
-            // tool->decr(stock )
-            //$tool->decrement('stock');
-            $dueDate = Carbon::now()->addDays(1);
-            //create loan([loan row])
-            // $loan = 
-            loan::create([
-                //if thres no usr_id, get aut id
-                'borrower_id' => $borrowerId,
-                'tool_id' => $tool->id,
-                'due_date'    => $dueDate, // SOLUSI ERROR TADI
-                'qty'         => $qtyInput, // Menangani multistock
-                'status'      => 'pending',
-                'loan_date' => Carbon::now()
-            ]);
-
-            // LOGGING
-            /* Catatan: Stok JANGAN dikurangi di sini (store),
-        ActivityLog::create([
-            'data' => "[PINJAM] $borrowerName meminjam alat: $tool->name_tools (ID Pinjam: $loan->id)"
-        ]);
-*/
-            //com all data
-            DB::commit();
-            return back()->with('success', 'Berhasil meminjam!');
-        } catch (\Exception $e) {
-            //db rb
-            DB::rollback();
-            //dd($e->getMessage());
-            return back()->with('error', $e->getMessage());
-        }
+    if ($selectedItems->isEmpty()) {
+        return back()->with('error', 'Pilih minimal satu alat dengan jumlah lebih dari 0!');
     }
+
+    DB::beginTransaction();
+    try {
+        $borrowerId = Auth::id();
+        $dueDate = Carbon::now()->addDays(1);
+
+        foreach ($selectedItems as $toolId => $data) {
+            $tool = tool::findOrFail($toolId);
+            $qtyInput = $data['qty'];
+
+            // Cek stok lagi buat jaga-jaga
+            if ($tool->stock < $qtyInput) {
+                throw new \Exception("Stok alat {$tool->name_tools} tidak mencukupi!");
+            }
+
+            // Create data per alat (Tetap 1 row 1 tool sesuai strukturmu)
+            loan::create([
+                'borrower_id' => $borrowerId,
+                'tool_id'     => $toolId,
+                'due_date'    => $dueDate,
+                'qty'         => $qtyInput,
+                'status'      => 'pending',
+                'loan_date'   => Carbon::now()
+            ]);
+            
+            // Note: Stok tidak dikurangi di sini karena status masih 'pending'
+            // Stok baru berkurang di fungsi approve() nanti
+        }
+
+        DB::commit();
+        return redirect()->back()->with('success', 'Berhasil mengajukan peminjaman massal!');
+        
+    } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Gagal meminjam: ' . $e->getMessage());
+    }
+}
 
     public function approve($id)
     {
